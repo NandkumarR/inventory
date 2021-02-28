@@ -108,7 +108,7 @@ public class InventoryRepositoryServiceImpl implements InventoryRepositoryServic
 
     }
     /*  Assignment reference -
-      * Get all products and quantity of each that is an available with the current inventory
+      * Get all products and quantity of each that is an available with the current inventory. Ideally this should be grouped by productid (unique identifier)
     */
     @Override
     public Map<String,Integer> fetchProductsAndInventoryLevel(){
@@ -128,7 +128,7 @@ public class InventoryRepositoryServiceImpl implements InventoryRepositoryServic
     */
     @Override
     public String productPurchaseAndInventoryUpdate(String productId) throws InventoryProcessException {
-        //Identifier being used is the document ID.
+        //Identifier being used is @Document _id.
         Optional<Product> soldProduct= productRepository.findById(productId);
         if (!soldProduct.isPresent()){
             throw new InventoryProcessException("No product found - : "+productId);
@@ -139,7 +139,7 @@ public class InventoryRepositoryServiceImpl implements InventoryRepositoryServic
         List<Article> currentInventoryArticle=findArticleByIdentificationNumber(requiredProductInventory.entrySet().stream()
                                                                                                               .map(e->e.getKey())
                                                                                                               .collect(Collectors.toList()));
-        //If required Articles for Product is more than available in the Inventory throw an erro.
+        //If required Articles for Product is more than available in the Inventory throw an error.
         Optional<Article> insufficientInventory= currentInventoryArticle.stream()
                 .filter(availableArticle-> (requiredProductInventory.get(availableArticle.getIdentificationNumber()) > availableArticle.getAvailableStock()))
                 .findAny();
