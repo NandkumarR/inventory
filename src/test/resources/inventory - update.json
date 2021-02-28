@@ -1,0 +1,13 @@
+{
+  "inventory": [
+    {
+      "art_id": "1",
+      "stock": "2"
+    },
+    {
+      "art_id": "4",
+      "name": "table top new",
+      "stock": "1"
+    }
+  ]
+}
