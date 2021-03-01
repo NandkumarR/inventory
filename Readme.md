@@ -38,3 +38,9 @@ Test files used
 /ikea/src/test/resources/products.json
 /ikea/src/test/resources/inventory - update.json
 /ikea/src/test/resources/products-error.json
+
+#Additional scope added
+As part of assignment spring security is also added to protect various API's. All GET calls are unauthenticated and can be accessed by any party. Rest all API's are authenticated API's
+since these API's perform WRITE operations. The request POST/PUT/DELETE need to add Partner tokens in the header request (X-Auth-Header)for authentication purposes else these requests are 
+marked as forbidden. The token is Base64 Encoded clientID:clientSecret value that is registered in the application.For development profiles this feature can also be disabled by marking 
+property inventory.partner.authentication.disabled as true.

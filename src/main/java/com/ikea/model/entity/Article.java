@@ -54,6 +54,7 @@ public class Article implements Serializable {
         this.availableStock = availableStock;
     }
 
+    //Bean mapper for copying source to target data.
     public void beanMapper(Article sourceArticle) {
         if(sourceArticle.getArticleName()!=null){
             this.setArticleName(sourceArticle.getArticleName());

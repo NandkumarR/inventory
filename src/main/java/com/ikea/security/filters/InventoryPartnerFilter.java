@@ -39,7 +39,7 @@ public class InventoryPartnerFilter extends GenericFilter {
     private String partnerClientId;
 
     //Disable spring security authentication checks.
-    @Value("${inventory.partner.authentication.disbaled}")
+    @Value("${inventory.partner.authentication.disabled}")
     private Boolean isPartnerAuthenticationDisabled;
 
 

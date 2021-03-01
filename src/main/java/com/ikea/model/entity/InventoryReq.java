@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author nandk
- * InventoryReq class that holds articels required by the products.
+ * InventoryReq class that holds articles required by the products.
  */
 public class InventoryReq implements Serializable{
     @JsonProperty("inventory")

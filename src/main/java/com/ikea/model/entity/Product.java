@@ -56,7 +56,7 @@ public class Product implements Serializable{
     public void setContainingArticles(List<ContainsArticle> containingArticles) {
         this.containingArticles = containingArticles;
     }
-
+        //Maps the Articles required by the product.
         public static class ContainsArticle{
             @NotEmpty
             @JsonProperty("art_id")
