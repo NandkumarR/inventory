@@ -16,7 +16,7 @@ public interface InventoryRepositoryService {
      * @param putAwayArticles
      * @return List of Article objects created.
      */
-    List<Article> stockUpArticles(List<Article> putAwayArticles);
+    List<Article> stockUpArticles(List<Article> putAwayArticles) throws InventoryProcessException;
 
     /**
      * Service used for updating  existing Article objects. If no Articles are found throws an exception.
@@ -55,7 +55,7 @@ public interface InventoryRepositoryService {
     List<Product> buildProducts(List<Product> productList) throws InventoryProcessException;
 
     /**
-     * Fetch current products and its corresponding Articles inventory level in the Inventory.
+     * Fetch current products and current inventory level .
      * @return List of Products and Artcile Identification number and its inventory level.
      */
     Map<String,Integer> fetchProductsAndInventoryLevel();
@@ -69,7 +69,7 @@ public interface InventoryRepositoryService {
     /**
      * Service executed whenever a product is sold out at POS. The inventory is updated with the stock of Articles post the purchase.
      * @param productId
-     * @throws InventoryProcessException When no Product is found.
+     * @throws InventoryProcessException When no Product is found or when not enough stock is available for Articles.
      */
     String productPurchaseAndInventoryUpdate(String productId) throws InventoryProcessException;
 }

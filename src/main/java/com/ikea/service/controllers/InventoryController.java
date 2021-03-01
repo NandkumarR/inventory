@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author nandk on 26/02/2021.
+ * @author nandk.
+ * Main controller that intercepts all api requests for inventory.
  */
 @RestController
 @RequestMapping(value = "/inventory")
@@ -58,7 +59,7 @@ public class InventoryController {
     }
 
     /**
-     * Build Product (spec) using articles. Defines how the product is made up of.
+     * Build Product (spec) using articles. Defines what the Product is made up of.
      * @param productList
      * @throws InventoryProcessException
      */
@@ -87,7 +88,7 @@ public class InventoryController {
     }
 
     /**
-     * Product sale at POS. The corresponding product and articles are updated in the inventory.
+     * Product sale at POS/Online. The corresponding product and articles are updated in the inventory.
      * @param productId
      * @throws InventoryProcessException
      */

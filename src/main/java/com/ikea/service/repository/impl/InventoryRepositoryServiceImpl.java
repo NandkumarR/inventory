@@ -19,13 +19,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * @author nandk on 26/02/2021.
+ * @author nandk
  * Implementation class for InventoryRepositryService.
  */
 @Service
 public class InventoryRepositoryServiceImpl implements InventoryRepositoryService{
 
     Logger logger = LoggerFactory.getLogger(InventoryRepositoryServiceImpl.class);
+
+    private static final String ARTICLE_ID="articleID";
+    private static final String STOCK_AVAILABLE="stockAvailable";
 
     @Resource
     private ArticleRepository articleRepository;
@@ -34,25 +37,30 @@ public class InventoryRepositoryServiceImpl implements InventoryRepositoryServic
     private ProductRepository productRepository;
 
     @Override
-    public List<Article> stockUpArticles(List<Article> putAwayArticles){
-        return articleRepository.saveAll(putAwayArticles);
+    public List<Article> stockUpArticles(List<Article> putAwayArticles) throws InventoryProcessException{
+            //Check for Articles already available in the system and throw duplicate exception.
+            putAwayArticles.stream()
+                           .filter(a->articleRepository.findByIdentificationNumber(a.getIdentificationNumber())!=null)
+                           .findAny()
+                           .ifPresent(e->{throw new InventoryProcessException("Duplicate Articles found. Please use update services for the same");});
+            return articleRepository.saveAll(putAwayArticles);
     }
 
     @Override
-    public List<Article> updateStockOfArticles(List<Article> updateStockArticles) throws InventoryProcessException{
-        List<Article> updateStockOfArticles = new ArrayList<>();
-        updateStockArticles.stream().forEach(a->{
+    public List<Article> updateStockOfArticles(List<Article> updateStockOfArticles) throws InventoryProcessException{
+        List<Article> finalListArticlesForUpdate = new ArrayList<>();
+        updateStockOfArticles.stream().forEach(a->{
             Article updateArticle=articleRepository.findByIdentificationNumber(a.getIdentificationNumber());
             if (updateArticle==null){
-                // Article not found and would be skipped to move to others.
+                // Article not found and would be skipped and move to others.
                 logger.warn("Article not found and will not be updated : -"+ a.getIdentificationNumber());
             }else{
                 updateArticle.beanMapper(a);
-                updateStockOfArticles.add(updateArticle);
+                finalListArticlesForUpdate.add(updateArticle);
             }
         });
         if (updateStockOfArticles.size()>0){
-            return stockUpArticles(updateStockOfArticles);
+            return articleRepository.saveAll(finalListArticlesForUpdate);
         }else{
             throw new InventoryProcessException("No Article available to update as validations failed");
         }
@@ -63,11 +71,12 @@ public class InventoryRepositoryServiceImpl implements InventoryRepositoryServic
     public List<Map<String,Object>> fetchArticlesAndInventoryLevel(){
         List<Map<String,Object>> inventoryLevelArticle= new ArrayList<>();
         Map<String,Integer> articleList= findAllArticles().stream()
-                                                .collect(Collectors.toMap(e->e.getArticleName(), e->e.getAvailableStock()));
+                                                          .collect(Collectors.toMap(e->e.getArticleName(), e->e.getAvailableStock()));
+        // Makes it a readable json
         articleList.forEach((k,v)->{
             Map<String,Object> articleId= new HashMap<>();
-            articleId.put("articleID",k);
-            articleId.put("stockAvailable",v);
+            articleId.put(ARTICLE_ID,k);
+            articleId.put(STOCK_AVAILABLE,v);
             inventoryLevelArticle.add(articleId);
         });
         return inventoryLevelArticle;
@@ -86,7 +95,7 @@ public class InventoryRepositoryServiceImpl implements InventoryRepositoryServic
     @Override
     public List<Product> buildProducts(List<Product> productList) throws InventoryProcessException {
         //Before the product is saved the articleId is checked if its a valid Article in the inventory, else the Product is skipped.
-        // Above validation can also be skipped from here and can be validated at the purchase API service.
+        // Above validation can be skipped from here and can be validated during the purchase API service.
         productList=productList.stream()
                                 .filter(a->{
                                             int totalArticlesRequired=a.getContainingArticles().size();
@@ -103,7 +112,7 @@ public class InventoryRepositoryServiceImpl implements InventoryRepositoryServic
         if (productList.size()>0){
             return productRepository.saveAll(productList);
         }else{
-            throw new InventoryProcessException("No product available to store as validations failed. Artciles not found in the inventory");
+            throw new InventoryProcessException("No product available to store as validations failed. Article(s) not found in the inventory");
         }
 
     }
@@ -127,14 +136,14 @@ public class InventoryRepositoryServiceImpl implements InventoryRepositoryServic
       * Remove(Sell) a product and update the inventory accordingly
     */
     @Override
-    public String productPurchaseAndInventoryUpdate(String productId) throws InventoryProcessException {
+    public String productPurchaseAndInventoryUpdate(String purchasedProductId) throws InventoryProcessException {
         //Identifier being used is @Document _id.
-        Optional<Product> soldProduct= productRepository.findById(productId);
-        if (!soldProduct.isPresent()){
-            throw new InventoryProcessException("No product found - : "+productId);
+        Optional<Product> purchasedProduct= productRepository.findById(purchasedProductId);
+        if (!purchasedProduct.isPresent()){
+            throw new InventoryProcessException("No product found - : "+purchasedProductId);
         }
         //Stores the Map of Article identifier and its required stock for Product sale.
-        Map<Integer,Integer> requiredProductInventory= soldProduct.get().getContainingArticles().stream()
+        Map<Integer,Integer> requiredProductInventory= purchasedProduct.get().getContainingArticles().stream()
                                                                                         .collect(Collectors.toMap(e->e.getArticleId(),e->e.getRequiredNumber()));
         List<Article> currentInventoryArticle=findArticleByIdentificationNumber(requiredProductInventory.entrySet().stream()
                                                                                                               .map(e->e.getKey())
@@ -153,7 +162,7 @@ public class InventoryRepositoryServiceImpl implements InventoryRepositoryServic
         //update inventory
         articleRepository.saveAll(currentInventoryArticle);
         //remove product.
-        productRepository.delete(soldProduct.get());
-        return "Sale approved for Product -: "+soldProduct.get().getProductName();
+        productRepository.delete(purchasedProduct.get());
+        return "Sale approved for Product -: "+purchasedProduct.get().getProductName();
     }
 }

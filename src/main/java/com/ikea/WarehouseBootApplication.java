@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class WarehouseBootApplication {
-
      public static void main(String arguments[]){
          SpringApplication.run(WarehouseBootApplication.class,arguments);
     }

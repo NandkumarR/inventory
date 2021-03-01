@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * @author nandk on 26/02/2021.
+ * @author nandk .
+ * Mongo Repositry for CRUD operations for Articles
  */
 @Repository
 public interface ArticleRepository extends MongoRepository<Article,String> {

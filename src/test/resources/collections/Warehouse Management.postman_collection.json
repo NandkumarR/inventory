@@ -1,0 +1,194 @@
+{
+	"info": {
+		"_postman_id": "12b86268-8b4c-49aa-84a9-310b1e69bacf",
+		"name": "Warehouse Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Put away articles",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Auth-Header",
+						"value": "Y2xpZW50YWRtaW46c2VjcmV0a2V5MTIz",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "inventory",
+							"type": "file",
+							"src": "/Users/nandk/ikea/src/test/resources/inventory.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/inventory/articles",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"inventory",
+						"articles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update articles",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "X-Auth-Header",
+						"value": "Y2xpZW50YWRtaW46c2VjcmV0a2V5MTIz",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "inventory",
+							"type": "file",
+							"src": "/Users/nandk/ikea/src/test/resources/inventory - update.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/inventory/articles",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"inventory",
+						"articles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Build Product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Auth-Header",
+						"value": "Y2xpZW50YWRtaW46c2VjcmV0a2V5MTIz",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "products",
+							"type": "file",
+							"src": "/Users/nandk/ikea/src/test/resources/products.json"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/inventory/products",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"inventory",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sale of Product",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-Auth-Header",
+						"value": "Y2xpZW50YWRtaW46c2VjcmV0a2V5MTIz",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{url}}/inventory/product/purchase/{{productId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"inventory",
+						"product",
+						"purchase",
+						"{{productId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Product Inventory Level",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{url}}/inventory/products/inventorylevel",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"inventory",
+						"products",
+						"inventorylevel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Article Inventory Level",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{url}}/inventory/articles/inventorylevel",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"inventory",
+						"articles",
+						"inventorylevel"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

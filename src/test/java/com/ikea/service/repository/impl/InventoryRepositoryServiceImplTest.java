@@ -43,6 +43,9 @@ public class InventoryRepositoryServiceImplTest {
 
     private Article article1;
 
+    /**
+     * Initialize the mocks and test data.
+     */
     @Before
     public void initialSetUp(){
         MockitoAnnotations.initMocks(this);
@@ -110,7 +113,7 @@ public class InventoryRepositoryServiceImplTest {
     }
 
     /**
-     * Product purchase is successfule
+     * Product purchase is successful
      */
     @Test
     public void productPurchaseAndInventoryUpdate_Success(){

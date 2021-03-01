@@ -5,7 +5,8 @@ import com.ikea.exception.InventoryProcessException;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @author nandk on 26/02/2021.
+ * @author nandk
+ * Entity mapper used to convert file into respective entities.
  */
 public interface EntityMapper {
 

@@ -1,3 +1,5 @@
+## A warehoue application created for inventory management. The application is developed based on the assignment block below.
+
 # Code Assignment
 
 ## Intro
@@ -13,3 +15,26 @@ The warehouse software should also have products, products are made of different
 The warehouse should have at least the following functionality;
 * Get all products and quantity of each that is an available with the current inventory
 * Remove(Sell) a product and update the inventory accordingly
+
+
+# Application stack
+
+Application runs on Java 8 + springboot + spring security (optional) + NoSQL MongoDB.
+
+# Tools used
+Intellij,Postman
+
+# Application build and unit test execution
+mvn clean install 
+
+# Application start up
+
+Run the spring boot application from the main class file WarehouseBootApplication.java.
+
+#Test API
+Postman collections to test API's available at /ikea/src/test/resources/collections/Warehouse Management.postman_collection.json
+Test files used 
+/ikea/src/test/resources/inventory.json
+/ikea/src/test/resources/products.json
+/ikea/src/test/resources/inventory - update.json
+/ikea/src/test/resources/products-error.json
